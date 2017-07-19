@@ -1,4 +1,13 @@
+# West Wind Globalization for ASP.NET Core
+
+This repo is a fully functional proof-of-concept of using West Wind Globalization in a pure .NET Core project. To get started, check out `Westwind.Globalization.Core.Sample`.
+
+The following original readme has not been updated for .NET Core, but is included for reference.
+
+---
+
 # West Wind Globalization
+
 ### Database Resource Localization for .NET
 
 This library and tooling provides easy to use database resource managers and providers that allow you to use a database for storing localization resources. Unlike static Resx resources, database resources are dynamic and can be changed at runtime and are editable by multiple users at the same time. The custom resource managers and providers use the standard .NET resource infrastructure, so other than startup configuration there are no code changes when switching from using traditional Resx resources - and you can always switch back just as easily.

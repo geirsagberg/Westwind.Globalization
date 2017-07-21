@@ -2,6 +2,16 @@
 
 This repo is a fully functional proof-of-concept of using West Wind Globalization in a pure .NET Core project. To get started, check out `Westwind.Globalization.Core.Sample`.
 
+Status:
+
+- [x] Migrate from `Westwind.Utilities.Configuration` to the new [.NET Core Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration)
+- [x] Replace HttpHandlers with an MVC Core Controller
+- [x] Update admin app to work with the new controller
+- [x] Import and export of ResX
+- [ ] Create strongly typed classes
+- [ ] Update tests
+- [ ] Publish to NuGet
+
 The following original readme has not been updated for .NET Core, but is included for reference.
 
 ---

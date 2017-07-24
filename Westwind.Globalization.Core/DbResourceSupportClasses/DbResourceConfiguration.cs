@@ -55,7 +55,7 @@ namespace Westwind.Globalization.Core.DbResourceSupportClasses
     /// from web.config (at runtime). You can override this behavior by creating your
     /// own configuration object and assigning it to the DbResourceConfiguration.Current property.
     /// </summary>
-    public class DbResourceConfiguration : Westwind.Utilities.Configuration.AppConfiguration
+    public class DbResourceConfiguration
     {
         
         /// <summary>
@@ -77,22 +77,6 @@ namespace Westwind.Globalization.Core.DbResourceSupportClasses
         /// </summary>
 //        public static DbResourceConfiguration Current = null;
 
-        /// <summary>
-        /// Determines how configuration information is stored: Config, Json or XML
-        /// Default uses .NET configuration files.
-        /// </summary>
-        public static ConfigurationModes ConfigurationMode  = ConfigurationModes.ConfigFile;
-
-        /// <summary>
-        /// Static constructor for the Current property - guarantees this
-        /// code fires exactly once giving us a singleton instance
-        /// of the configuration object.
-        /// </summary>
-        static DbResourceConfiguration()
-        {
-//            Current = new DbResourceConfiguration();
-//            Current.Initialize(sectionName: "DbResourceConfiguration");
-        }
 
         /// <summary>
         /// Database connection string to the resource data.
@@ -109,6 +93,15 @@ namespace Westwind.Globalization.Core.DbResourceSupportClasses
         /// </summary>
         public string ResourceTableName { get; set; } = "Localizations";
 
+        /// <summary>
+        /// Database schema used in the database (if supported)
+        /// </summary>
+        public string ResourceTableSchema { get; set; } = "dbo";
+
+        /// <summary>
+        /// Full table name with schema, e.g. "dbo.Localizations"
+        /// </summary>
+        public string GetResourceTableNameWithSchema() => $"{ResourceTableSchema}.{ResourceTableName}";
 
         /// <summary>
         /// Path of an optionally generated strongly typed resource
@@ -219,134 +212,6 @@ namespace Westwind.Globalization.Core.DbResourceSupportClasses
             ResourceSetValueConverters.Add(converter);
         }        
 
-        /// <summary>
-        /// Override this method to create the custom default provider. Here we allow for different 
-        /// configuration providers so we don't have to rely on .NET configuration classed (for vNext)
-        /// </summary>
-        protected override IConfigurationProvider OnCreateDefaultProvider(string sectionName, object configData)
-        {
-            if (string.IsNullOrEmpty(sectionName))
-                sectionName = "DbResourceConfiguration";
-
-            IConfigurationProvider provider;
-
-            if (ConfigurationMode == ConfigurationModes.JsonFile)
-            {
-                provider = new JsonFileConfigurationProvider<DbResourceConfiguration>()
-                {
-                    JsonConfigurationFile =
-                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DbResourceConfiguration.json")
-                };
-            }
-            else if (ConfigurationMode == ConfigurationModes.XmlFile)
-            {
-                provider = new XmlFileConfigurationProvider<DbResourceConfiguration>()
-                {
-                    XmlConfigurationFile =
-                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DbResourceConfiguration.xml")
-                };
-            }
-            else
-            {
-                throw new NotImplementedException();
-//                provider = new ConfigurationFileConfigurationProvider<DbResourceConfiguration>()
-//                {
-//                    ConfigurationSection = sectionName
-//                };
-            }
-
-            return provider;
-        }
-
-        ///// <summary>
-        ///// Default constructor used to read the configuration section to retrieve its values
-        ///// on startup.
-        ///// </summary>
-        ///// <param name="readConfigurationSection"></param>
-        //public DbResourceConfiguration(bool readConfigurationSection)
-        //{
-        //    if (readConfigurationSection)
-        //        ReadConfigurationSection();
-        //}
-
-
-        ///// <summary>
-        ///// Reads the DbResourceProvider Configuration Section and assigns the values 
-        ///// to the properties of this class
-        ///// </summary>
-        ///// <returns></returns>
-        //public bool ReadConfigurationSection()
-        //{            
-        //    //TSection = WebConfigurationManager.GetWebApplicationSection("DbResourceProvider");
-        //    object TSection = ConfigurationManager.GetSection("DbResourceProvider");
-        //    if (TSection == null)
-        //        return false;
-
-        //    var section = TSection as DbResourceProviderSection;
-        //    ReadSectionValues(section);
-
-        //    return true;
-        //}
-
-        ///// <summary>
-        ///// Handle design time access to the configuration settings - used for the 
-        ///// DbDesignTimeResourceProvider - when loaded we re-read the settings
-        ///// </summary>
-        ///// <param name="serviceHost"></param>
-        //public bool ReadDesignTimeConfiguration(IServiceProvider serviceProvider )
-        //{
-        //    IWebApplication webApp = serviceProvider.GetService(typeof(IWebApplication)) as IWebApplication;
-
-        //    // Can't get an application instance - can only exit
-        //    if (webApp == null)
-        //        return false;
-
-        //    object TSection = webApp.OpenWebConfiguration(true).GetSection("DbResourceProvider");
-        //    if (TSection == null)
-        //        return false;
-
-        //    var section = TSection as DbResourceProviderSection;
-        //    ReadSectionValues(section);
-
-        //    // If the connection string doesn't contain = then it's
-        //    // a ConnectionString key from .config. This is handled in
-        //    // in the propertyGet of the resource configration, but it uses
-        //    // ConfigurationManager which is not available at design time
-        //    //  So we have to duplicate the code here using the WebConfiguration.
-        //    if (!ConnectionString.Contains("="))
-        //    {
-        //        try
-        //        {
-        //            string conn = webApp.OpenWebConfiguration(true).ConnectionStrings.ConnectionStrings[ConnectionString].ConnectionString;
-        //            ConnectionString = conn;
-        //        }
-        //        catch { }                
-        //    }
-                
-        //    return true;
-        //}
-
-        ///// <summary>
-        ///// Reads the actual section values
-        ///// </summary>
-        ///// <param name="section"></param>
-        //private void ReadSectionValues(DbResourceProviderSection section)
-        //{
-        //    ConnectionString = section.ConnectionString;
-        //    ResourceTableName = section.ResourceTableName;
-        //    DesignTimeVirtualPath = section.DesignTimeVirtualPath;
-        //    LocalizationFormWebPath = section.LocalizationFormWebPath;
-        //    ShowLocalizationControlOptions = section.ShowLocalizationControlOptions;
-        //    ShowControlIcons = section.ShowControlIcons;
-        //    AddMissingResources = section.AddMissingResources;
-        //    StronglyTypedGlobalResource = section.StronglyTypedGlobalResource;
-        //    ResourceBaseNamespace = section.ResourceBaseNamespace;
-        //    ResxExportProjectType = section.ResxExportProjectType;
-        //    ResxBaseFolder = section.ResxBaseFolder;
-        //    BingClientId = section.BingClientId;
-        //    BingClientSecret = section.BingClientSecret;
-        //}
-
 
         /// <summary>
         /// Keep track of loaded providers so we can unload them
@@ -378,13 +243,6 @@ namespace Westwind.Globalization.Core.DbResourceSupportClasses
         }
 
 
-    }
-
-    public enum ConfigurationModes
-    {
-        ConfigFile,
-        JsonFile,
-        XmlFile
     }
 
     /// <summary>

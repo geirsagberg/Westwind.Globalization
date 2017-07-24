@@ -119,12 +119,12 @@ namespace Westwind.Globalization.Core.Web.Administration
         }
 
         [HttpGet("[action]")]
-        public JsonResult GetResourceListHtml(string resourceSet)
+        public IActionResult GetResourceListHtml(string resourceSet)
         {
             var ids = manager.GetAllResourceIdListItems(resourceSet);
             if (ids == null)
                 throw new WestwindException("Resource set loading failed: " +
-                                            manager.ErrorMessage);
+                    manager.ErrorMessage);
 
             return Json(ids, jsonSerializerSettings);
         }
@@ -708,6 +708,7 @@ namespace Westwind.Globalization.Core.Web.Administration
                 ProviderFactory = "No provider configured",
                 configuration.ConnectionString,
                 configuration.ResourceTableName,
+                configuration.ResourceTableSchema,
                 DbResourceProviderType = configuration.DbResourceDataManagerType.Name,
                 configuration.ResxExportProjectType,
                 configuration.ResxBaseFolder,

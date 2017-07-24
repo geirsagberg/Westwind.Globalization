@@ -1,4 +1,5 @@
 #region License
+
 /*
  **************************************************************
  *  Author: Rick Strahl 
@@ -28,6 +29,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  **************************************************************  
 */
+
 #endregion
 
 
@@ -42,10 +44,10 @@ using Westwind.Utilities;
 namespace Westwind.Globalization.Core.Utilities
 {
     /// <summary>
-    /// Class that handles generating strongly typed resources 
-    /// for global Web resource files. This feature is not supported
-    /// in ASP.NET stock projects and doesn't support custom resource
-    /// providers in WAP.
+    ///     Class that handles generating strongly typed resources
+    ///     for global Web resource files. This feature is not supported
+    ///     in ASP.NET stock projects and doesn't support custom resource
+    ///     providers in WAP.
     /// </summary>
     public class JavaScriptResources
     {
@@ -54,33 +56,23 @@ namespace Westwind.Globalization.Core.Utilities
         public JavaScriptResources(string outputPath, DbResourceConfiguration configuration)
         {
             this.configuration = configuration;
-            this.OutputPath = outputPath;
+            OutputPath = outputPath;
         }
 
         /// <summary>
-        /// The physical path for the Web application
+        ///     The physical path for the Web application
         /// </summary>
-        public string OutputPath
-        {
-            get { return _outputPath; }
-            set { _outputPath = value; }
-        }
-        private string _outputPath = "";
+        public string OutputPath { get; set; } = "";
 
 
         /// <summary>
-        /// An error message set on a failure result
+        ///     An error message set on a failure result
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return _ErrorMessage; }
-            set { _ErrorMessage = value; }
-        }
-        private string _ErrorMessage = "";
+        public string ErrorMessage { get; set; } = "";
 
 
         public bool ExportJavaScriptResources(string path, string baseVarname = "resources")
-        {            
+        {
             var man = DbResourceDataManager.DbResourceDataManager.CreateDbResourceDataManager(configuration);
             var resourceSets = man.GetAllResourceSets(ResourceListingTypes.GlobalResourcesOnly);
 
@@ -93,10 +85,10 @@ namespace Westwind.Globalization.Core.Utilities
                 foreach (var locale in locales)
                 {
                     var resourceSet = man.GetResourceSetNormalizedForLocaleId(locale, resSet);
-                    string js = SerializeResourceDictionary(resourceSet, baseVarname + "." + resSet,locale);
+                    var js = SerializeResourceDictionary(resourceSet, baseVarname + "." + resSet, locale);
 
                     var filePath = Path.Combine(path, SafeVarName(resSet)) +
-                        (string.IsNullOrEmpty(locale) ? "" : "." + locale)  +  
+                        (string.IsNullOrEmpty(locale) ? "" : "." + locale) +
                         ".js";
                     File.WriteAllText(filePath, js);
                 }
@@ -107,29 +99,30 @@ namespace Westwind.Globalization.Core.Utilities
 
 
         /// <summary>
-        /// Generates the actual JavaScript object map string makes up the
-        /// handler's result content.
+        ///     Generates the actual JavaScript object map string makes up the
+        ///     handler's result content.
         /// </summary>
         /// <param name="resxDict"></param>
         /// <param name="resourceSetName"></param>
         /// <returns></returns>
-        private string SerializeResourceDictionary(Dictionary<string, object> resxDict, string resourceSetName, string localeId)
+        private string SerializeResourceDictionary(Dictionary<string, object> resxDict, string resourceSetName,
+            string localeId)
         {
-            StringBuilder sb = new StringBuilder(2048);
+            var sb = new StringBuilder(2048);
 
             sb.Append(resourceSetName + " = {\r\n");
             sb.AppendLine("\t\"__localeId\": \"" + localeId + "\";");
 
-            int anonymousIdCounter = 0;
-            foreach (KeyValuePair<string, object> item in resxDict)
+            var anonymousIdCounter = 0;
+            foreach (var item in resxDict)
             {
-                string value = item.Value as string;
+                var value = item.Value as string;
                 if (value == null)
                     continue; // only encode string values
 
-                string key = item.Key;
+                var key = item.Key;
                 if (string.IsNullOrEmpty(item.Key))
-                    key = "__id" + anonymousIdCounter++.ToString();
+                    key = "__id" + anonymousIdCounter++;
 
                 key = key.Replace(".", "_");
                 if (key.Contains(" "))
@@ -142,7 +135,7 @@ namespace Westwind.Globalization.Core.Utilities
 
             // add dbRes function
             sb.AppendFormat(
-"\t" + @"""dbRes"": function dbRes(resId) {{ return {0}[resId] || resId; }}      
+                "\t" + @"""dbRes"": function dbRes(resId) {{ return {0}[resId] || resId; }}      
 }}
 ", resourceSetName);
 
@@ -150,28 +143,27 @@ namespace Westwind.Globalization.Core.Utilities
             return sb.ToString();
         }
 
-        
-
 
         public static string SafeVarName(string phrase)
         {
             if (phrase == null)
                 return string.Empty;
 
-            StringBuilder sb = new StringBuilder(phrase.Length);
+            var sb = new StringBuilder(phrase.Length);
 
             // First letter is always upper case
-            bool nextUpper = false;
-            bool isFirst = true;
+            var nextUpper = false;
+            var isFirst = true;
 
-            foreach (char ch in phrase)
+            foreach (var ch in phrase)
             {
                 if (isFirst && char.IsDigit(ch))
                     sb.Append("_"); // prefix
                 isFirst = false;
 
                 // skip
-                if (char.IsWhiteSpace(ch) || char.IsPunctuation(ch) || char.IsSeparator(ch) || char.IsControl(ch) || char.IsSymbol(ch) )
+                if (char.IsWhiteSpace(ch) || char.IsPunctuation(ch) || char.IsSeparator(ch) || char.IsControl(ch) ||
+                    char.IsSymbol(ch))
                 {
                     nextUpper = true;
                     continue;
@@ -185,5 +177,4 @@ namespace Westwind.Globalization.Core.Utilities
             return sb.ToString();
         }
     }
-
 }

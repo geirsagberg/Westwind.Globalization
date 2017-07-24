@@ -4,14 +4,14 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
+using Westwind.Globalization.Core.Utilities;
+using Xunit;
 
 namespace Westwind.Globalization.Test
 {
     /// <summary>
     /// Summary description for DbResXConverterTests
     /// </summary>
-    [TestFixture]
     public class StronglyTypedResourceTests
     {
 
@@ -22,26 +22,26 @@ namespace Westwind.Globalization.Test
             //DbResourceConfiguration.Current.DbResourceDataManagerType = typeof (DbResourceSqLiteDataManager);
         }
 
-        [Test]
+	[Fact]
         public void GenerateStronglyTypedResourceClassFilteredTest()
         {
-            var str = new StronglyTypedResources("c:\temp");
+	    var str = new StronglyTypedResources(@"c:\temp");
             var res = str.CreateClassFromAllDatabaseResources("ResourceExport", @"resources.cs",new string[] { "Resources" });
 
             Console.WriteLine(res);
         }
 
 
-        [Test]
+	[Fact]
         public void GenerateStronglyTypedResourceResxDesignerFilteredTest()
         {
-            var str = new StronglyTypedResources("c:\temp");
+	    var str = new StronglyTypedResources(@"c:\temp");
             var res = str.CreateResxDesignerClassesFromAllDatabaseResources("ResourceExport", @"c:\temp\resourceTest", new string[] { "Resources" });
 
             Console.WriteLine(res);
         }
 
-                [Test]
+		[Fact]
         public void GenerateStronglyTypedResourceResxDesignerAllResourcesTest()
         {
             
@@ -51,7 +51,7 @@ namespace Westwind.Globalization.Test
             Console.WriteLine(res);
         }
 
-        [Test]
+	[Fact]
         public void GenerateStronglyTypedDesignerClassFromResxFile()
         {
             string filename = @"c:\temp\resourceTest\LocalizationForm.resx";
@@ -62,7 +62,7 @@ namespace Westwind.Globalization.Test
             var str = new StronglyTypedResources(@"c:\temp\resourceTest");
             str.CreateResxDesignerClassFromResxFile(filename,"LocalizationAdmin","Westwind.Globalization.Sample");
 
-            Assert.IsTrue(File.Exists(designerFile));
+	    Assert.True(File.Exists(designerFile));
 
         }
     }

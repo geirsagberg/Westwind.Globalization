@@ -3,67 +3,73 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
+using Westwind.Globalization.Core.DbResourceDataManager;
+using Westwind.Globalization.Core.DbResourceDataManager.DbResourceDataManagers;
+using Westwind.Globalization.Core.DbResourceSupportClasses;
+using Westwind.Globalization.Core.Utilities;
+using Xunit;
 
 namespace Westwind.Globalization.Test
 {
-    /// <summary>
-    /// Summary description for DbResXConverterTests
-    /// </summary>
-    [TestFixture]
     public class DbResXConverterTests
     {
+	private DbResourceConfiguration configuration;
 
-    
+
         public DbResXConverterTests()
         {
             //DbResourceConfiguration.Current.ConnectionString = "SqLiteLocalizations";
             //DbResourceConfiguration.Current.DbResourceDataManagerType = typeof (DbResourceSqLiteDataManager);
+	    configuration = new DbResourceConfiguration
+	    {
+		ConnectionString = "SqLiteLocalizations",
+		DbResourceDataManagerType = typeof(DbResourceSqLiteDataManager)
+	    };
         }
 
         /// <summary>
         ///  convert Resx file to a resource dictionary
         /// </summary>
-        [Test]
+	[Fact]
         public void GetResXResourcesTest()
         {
             string path = @"c:\temp\resources";
-            DbResXConverter converter = new DbResXConverter(path);
+	    DbResXConverter converter = new DbResXConverter(configuration, path);
             Dictionary<string, object> items = converter.GetResXResourcesNormalizedForLocale(@"C:\Temp\Westwind.Globalizations\Westwind.Globalization.Sample\LocalizationAdmin\App_LocalResources\LocalizationAdmin.aspx", "de-de");
             WriteResourceDictionary(items,"ResX Resources");
         }
 
-        [Test]
+	[Fact]
         public void GetDbResourcesTest()
         {
             // create manager based on configuration
-            var manager = DbResourceDataManager.CreateDbResourceDataManager();
+	    var manager = DbResourceDataManager.CreateDbResourceDataManager(configuration);
 
             Dictionary<string,object> items = manager.GetResourceSetNormalizedForLocaleId("de-de", "Resources");
 
             WriteResourceDictionary(items, "DB Resources");            
         }
 
-        [Test]
+	[Fact]
         public void WriteResxFromDbResources()
         {
-            DbResXConverter converter = new DbResXConverter(@"c:\temp\resources");
-            Assert.IsTrue(converter.GenerateResXFiles(), converter.ErrorMessage);
+	    DbResXConverter converter = new DbResXConverter(configuration, @"c:\temp\resources");
+	    Assert.True(converter.GenerateResXFiles(), converter.ErrorMessage);
         }
 
-        [Test]
+	[Fact]
         public void ImportResxResources()
         {
             bool result = false;
             //var manager = Activator.CreateInstance(DbResourceConfiguration.Current.DbResourceDataManagerType) as IDbResourceDataManager;
             //result = manager.CreateLocalizationTable("Localizations");
-            //Assert.IsTrue(result, manager.ErrorMessage);
+	    //Assert.True(result, manager.ErrorMessage);
             
             string physicalPath = Path.GetFullPath(@"..\..\..\Westwind.Globalization.Sample");
-            DbResXConverter converter = new DbResXConverter(physicalPath);
-            result = converter.ImportWebResources();
+	    DbResXConverter converter = new DbResXConverter(configuration, physicalPath);
+	    result = converter.ImportWinResources(physicalPath);
 
-            Assert.IsTrue(result, converter.ErrorMessage);
+	    Assert.True(result, converter.ErrorMessage);
         }
 
 

@@ -8,7 +8,8 @@ Status:
 - [x] Replace HttpHandlers with an MVC Core Controller
 - [x] Update admin app to work with the new controller
 - [x] Import and export of ResX
-- [ ] Create strongly typed classes
+- [ ] Export strongly typed classes
+- [ ] Localization of images and binary files
 - [ ] Update tests
 - [ ] Publish to NuGet
 

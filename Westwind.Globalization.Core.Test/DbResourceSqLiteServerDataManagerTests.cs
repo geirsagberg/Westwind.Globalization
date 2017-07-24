@@ -1,28 +1,32 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework;
-using Westwind.Utilities.Data;
+using Westwind.Globalization.Core.DbResourceDataManager;
+using Westwind.Globalization.Core.DbResourceDataManager.DbResourceDataManagers;
+using Westwind.Globalization.Core.DbResourceSupportClasses;
+using Xunit;
 
 
 namespace Westwind.Globalization.Test
 {
-    [TestFixture]
     public class DbResourceSqLiteDataManagerTests
     {
+	private DbResourceConfiguration configuration;
+
+	public DbResourceSqLiteDataManagerTests()
+	{
+	    configuration = new DbResourceConfiguration();
+	}
 
         private IDbResourceDataManager GetManager()
         {
-            var manager = new DbResourceSqLiteDataManager();
+	    var manager = new DbResourceSqLiteDataManager(configuration);
             manager.Configuration.ConnectionString = "SqLiteLocalizations";
             //manager.Configuration.ResourceTableName = "Localizations";
             return manager;
         }
 
-
-  
-
-        [Test]
+	[Fact]
         public void CreateTable()
         {
             var manager = GetManager();
@@ -36,69 +40,68 @@ namespace Westwind.Globalization.Test
                 Console.WriteLine(manager.ErrorMessage);
         }
 
-
-        [Test]
+	[Fact]
         public void IsLocalizationTable()
         {
             var manager = GetManager();
-            Assert.IsTrue(manager.IsLocalizationTable("Localizations"), manager.ErrorMessage);
+	    Assert.True(manager.IsLocalizationTable("Localizations"), manager.ErrorMessage);
         }
 
-        [Test]
+	[Fact]
         public void GetAllResources()
         {
             var manager = GetManager();
 
             var items = manager.GetAllResources(false);
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
 
             ShowResources(items);    
         }
 
-        [Test]
+	[Fact]
         public void GetResourceSet()
         {
             var manager = GetManager();
 
             var items = manager.GetResourceSet("de","Resources");
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
 
             ShowResources(items);
         }
 
-        [Test]
+	[Fact]
         public void GetResourceSetNormalizedForLocaleId()
         {
             var manager = GetManager();
 
             var items = manager.GetResourceSetNormalizedForLocaleId("de", "Resources");
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
 
             ShowResources(items);
         }
 
-        [Test]
+	[Fact]
         public void GetAllResourceIds()
         {
             var manager = GetManager();
 
             var items = manager.GetAllResourceIds("Resources");
-            Assert.IsNotNull(items,manager.ErrorMessage);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
         }
 
 
-        [Test]
+	[Fact]
         public void GetAllResourceIdsForHtmlDisplay()
         {
             var manager = GetManager();
             var items = manager.GetAllResourceIdListItems("Resources");
 
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
 
             foreach (var item in items)
             {
@@ -106,14 +109,14 @@ namespace Westwind.Globalization.Test
             }
         }
         
-        [Test]
+	[Fact]
         public void GetAllResourceSets()
         {
             var manager = GetManager();
 
             var items = manager.GetAllResourceSets(ResourceListingTypes.AllResources);
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
 
             foreach (var item in items)
             {
@@ -121,7 +124,7 @@ namespace Westwind.Globalization.Test
             }
 
             items = manager.GetAllResourceSets(ResourceListingTypes.LocalResourcesOnly);
-            Assert.IsNotNull(items);            
+	    Assert.NotNull(items);
 
             Console.WriteLine("--- Local ---");
             foreach (var item in items)
@@ -130,7 +133,7 @@ namespace Westwind.Globalization.Test
             }
 
             items = manager.GetAllResourceSets(ResourceListingTypes.GlobalResourcesOnly);
-            Assert.IsNotNull(items);            
+	    Assert.NotNull(items);
 
             Console.WriteLine("--- Global ---");
             foreach (var item in items)
@@ -139,14 +142,14 @@ namespace Westwind.Globalization.Test
             }
         }
 
-        [Test]
+	[Fact]
         public void GetAllLocaleIds()
         {
             var manager = GetManager();
 
             var items = manager.GetAllLocaleIds("Resources");
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
 
             foreach (var localeId in items)
             {
@@ -155,14 +158,14 @@ namespace Westwind.Globalization.Test
             
         }
 
-        [Test]
+	[Fact]
         public void GetAllResourcesForCulture()
         {
             var manager = GetManager();
 
             var items = manager.GetAllResourcesForCulture("Resources","de");
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
 
             foreach (var localeId in items)
             {
@@ -170,29 +173,29 @@ namespace Westwind.Globalization.Test
             }
         }
 
-        [Test]
+	[Fact]
         public void GetResourceString()
         {
             var manager = GetManager();
 
             var item = manager.GetResourceString("Today", "Resources", "de");
 
-            Assert.IsNotNull(item);
-            Assert.IsTrue(item == "Heute");
+	    Assert.NotNull(item);
+	    Assert.True(item == "Heute");
         }
 
-        [Test]
+	[Fact]
         public void GetResourceItem()
         {
             var manager = GetManager();
 
             var item = manager.GetResourceItem("Today", "Resources", "de");
 
-            Assert.IsNotNull(item);
-            Assert.IsTrue(item.Value.ToString() == "Heute");
+	    Assert.NotNull(item);
+	    Assert.True(item.Value.ToString() == "Heute");
         }
 
-        [Test]
+	[Fact]
         public void GetResourceObject()
         {
             var manager = GetManager();
@@ -201,26 +204,26 @@ namespace Westwind.Globalization.Test
             // underlying type - demo data doesn't include any binary data.
             var item = manager.GetResourceObject("Today", "Resources", "de");
 
-            Assert.IsNotNull(item);
-            Assert.IsTrue(item.ToString() == "Heute");
+	    Assert.NotNull(item);
+	    Assert.True(item.ToString() == "Heute");
         }
 
-        [Test]
+	[Fact]
         public void GetResourceStrings()
         {
             var manager = GetManager();
 
             var items = manager.GetResourceStrings("Today", "Resources");
 
-            Assert.IsNotNull(items);
-            Assert.IsTrue(items.Count > 0);
+	    Assert.NotNull(items);
+	    Assert.True(items.Count > 0);
 
             ShowResources(items);
 
         }
 
 
-        [Test]
+	[Fact]
         public void UpdateResourceString()
         {
             var manager = GetManager();
@@ -228,16 +231,16 @@ namespace Westwind.Globalization.Test
             string updated = "Heute Updated";
             int count =  manager.UpdateOrAddResource("Today",updated,"de","Resources",null,false);
 
-            Assert.IsFalse(count == -1, manager.ErrorMessage);
+	    Assert.False(count == -1, manager.ErrorMessage);
             string check = manager.GetResourceString("Today", "Resources", "de");
 
-            Assert.AreEqual(check, updated);
+	    Assert.Equal(check, updated);
             Console.WriteLine(check);
 
             manager.UpdateOrAddResource("Today", "Heute", "de", "Resources",null,false);
         }
 
-        [Test]
+	[Fact]
         public void UpdateInvalidResourceString()
         {
             var manager = GetManager();
@@ -247,14 +250,14 @@ namespace Westwind.Globalization.Test
 
             int count = manager.UpdateResource(resourceId, text, "de", "Resources");
 
-            Assert.IsTrue(string.IsNullOrEmpty(manager.ErrorMessage));
-            Assert.IsTrue(count == 0,"Shouldn't update a non-existing record");
+	    Assert.True(string.IsNullOrEmpty(manager.ErrorMessage));
+	    Assert.True(count == 0,"Shouldn't update a non-existing record");
             Console.WriteLine(count);
         }
 
 
 
-        [Test]
+	[Fact]
         public void AddAndDeleteResourceString()
         {
             var manager = GetManager();
@@ -264,17 +267,17 @@ namespace Westwind.Globalization.Test
 
             int count = manager.AddResource(resourceId, text, "de", "Resources");
 
-            Assert.IsFalse(count == -1, manager.ErrorMessage);
+	    Assert.False(count == -1, manager.ErrorMessage);
             string check = manager.GetResourceString(resourceId, "Resources", "de");
 
-            Assert.AreEqual(check, text);
+	    Assert.Equal(check, text);
             Console.WriteLine(check);
 
             bool result = manager.DeleteResource(resourceId,resourceSet: "Resources", cultureName: "de");
-            Assert.IsTrue(result, manager.ErrorMessage);
+	    Assert.True(result, manager.ErrorMessage);
 
             check = manager.GetResourceString(resourceId, "Resources", "de");
-            Assert.IsNull(check, manager.ErrorMessage);
+	    Assert.Null(check);
         }
 
 

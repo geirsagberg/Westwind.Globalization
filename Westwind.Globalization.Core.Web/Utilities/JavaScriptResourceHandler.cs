@@ -35,7 +35,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Resources;
 using System.Text;
@@ -100,15 +99,11 @@ namespace Westwind.Globalization.Core.Web.Utilities
             Dictionary<string, object> resDict = null;
 
             if (string.IsNullOrEmpty(resourceType) || resourceType == "auto")
-                if (DbResourceProvider.DbResourceProvider.ProviderLoaded ||
-                    DbSimpleResourceProvider.DbSimpleResourceProvider.ProviderLoaded)
-                    resourceType = "resdb";
-                else
-                    resourceType = "resx";
+		resourceType = "resdb";
 
             var basePath = hostingEnvironment.MapPath(configuration.ResxBaseFolder);
             var converter = new DbResXConverter(configuration, basePath);
-            
+
             if (resourceType.ToLower() == "resdb")
             {
                 // use existing/cached resource manager if previously used
@@ -299,9 +294,7 @@ namespace Westwind.Globalization.Core.Web.Utilities
             ResourceProviderTypes resourceType = ResourceProviderTypes.AutoDetect)
         {
             if (resourceType == ResourceProviderTypes.AutoDetect)
-                if (DbSimpleResourceProvider.DbSimpleResourceProvider.ProviderLoaded ||
-                    DbResourceProvider.DbResourceProvider.ProviderLoaded)
-                    resourceType = ResourceProviderTypes.DbResourceProvider;
+		resourceType = ResourceProviderTypes.DbResourceProvider;
 
 
             var sb = new StringBuilder(512);
@@ -344,9 +337,7 @@ namespace Westwind.Globalization.Core.Web.Utilities
             ResourceProviderTypes resourceType, bool includeControls)
         {
             if (resourceType == ResourceProviderTypes.AutoDetect)
-                if (DbSimpleResourceProvider.DbSimpleResourceProvider.ProviderLoaded ||
-                    DbResourceProvider.DbResourceProvider.ProviderLoaded)
-                    resourceType = ResourceProviderTypes.DbResourceProvider;
+		resourceType = ResourceProviderTypes.DbResourceProvider;
 
             var sb = new StringBuilder(512);
 
@@ -381,9 +372,7 @@ namespace Westwind.Globalization.Core.Web.Utilities
                 localeId = CultureInfo.CurrentUICulture.IetfLanguageTag;
 
             if (resourceType == ResourceProviderTypes.AutoDetect)
-                if (DbSimpleResourceProvider.DbSimpleResourceProvider.ProviderLoaded ||
-                    DbResourceProvider.DbResourceProvider.ProviderLoaded)
-                    resourceType = ResourceProviderTypes.DbResourceProvider;
+		resourceType = ResourceProviderTypes.DbResourceProvider;
 
             var sb = new StringBuilder(512);
             sb.Append("/JavaScriptResourceHandler.axd?");

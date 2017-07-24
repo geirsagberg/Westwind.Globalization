@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Data.Common;
 using System.Threading;
-using NUnit.Framework;
+using Westwind.Globalization.Core.DbResourceManager;
 using Westwind.Utilities.Data;
+using Xunit;
 
 namespace Westwind.Globalization.Test
 {
-    [TestFixture]
     public partial class DbResourceDataManagerWithSqlTests
     {
 
@@ -14,7 +14,7 @@ namespace Westwind.Globalization.Test
 
       
 
-        [Test]
+	[Fact]
         public void CheckDataBase()
         {
             SqlDataAccess db = new SqlDataAccess(STR_ConnectionString);
@@ -23,7 +23,7 @@ namespace Westwind.Globalization.Test
         }
         
 
-        [Test]
+	[Fact]
         public void DbResSimpleValues()
         {
             Console.WriteLine(DbRes.T("Today", "Resources", "de-de"));
@@ -35,7 +35,7 @@ namespace Westwind.Globalization.Test
             Console.WriteLine(DbRes.T("Save", "Resources", "en-US"));
         }
 
-        [Test]
+	[Fact]
         public void DbResHeavyLoad()
         {
             var dt = DateTime.Now;

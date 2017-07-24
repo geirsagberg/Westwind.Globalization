@@ -1,18 +1,19 @@
 ﻿using System;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Westwind.Globalization.Core.DbResourceSupportClasses;
+using Westwind.Globalization.Core.Utilities;
+using Xunit;
 
 namespace Westwind.Globalization.Test
 {
-    [TestClass]
     public class JavaScriptresourcesTests
     {
-        [TestMethod]
+	[Fact]
         public void GenerateResources()
         {
-            var js = new JavaScriptResources(".\\");
+	    var js = new JavaScriptResources(".\\", new DbResourceConfiguration());
             bool result = js.ExportJavaScriptResources(".\\JavascriptResources\\","global.resources");
-            Assert.IsTrue(result);
+	    Assert.True(result);
             Console.WriteLine(File.ReadAllText(".\\JavascriptResources\\" + "LocalizationForm.de.js"));
         }
     }

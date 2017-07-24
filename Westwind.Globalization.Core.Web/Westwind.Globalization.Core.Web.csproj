@@ -14,8 +14,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.0-preview2-final" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0-preview2-final" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DbResourceProvider" />
-    <Folder Include="DbSimpleResourceProvider" />
-  </ItemGroup>
 </Project>

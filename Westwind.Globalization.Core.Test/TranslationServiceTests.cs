@@ -1,19 +1,26 @@
 ﻿using System;
-using NUnit.Framework;
+using Westwind.Globalization.Core.DbResourceSupportClasses;
+using Westwind.Globalization.Core.Utilities;
+using Xunit;
 
 namespace Westwind.Globalization.Test
 {
     /// <summary>
     /// Summary description for TranslationServiceTests
     /// </summary>
-    [TestFixture]
     public class TranslationServiceTests
     {
+        private readonly DbResourceConfiguration configuration;
 
-	[Fact]
+        public TranslationServiceTests()
+        {
+            configuration = new DbResourceConfiguration();
+        }
+
+        [Fact]
         public void TranslateGoogleTest()
         {
-            TranslationServices service = new TranslationServices();
+            TranslationServices service = new TranslationServices(configuration);
 
             string q = null;
 
@@ -23,14 +30,14 @@ namespace Westwind.Globalization.Test
             Console.WriteLine(result);
             Console.WriteLine();
 
-	    Assert.False(string.IsNullOrEmpty(result), service.ErrorMessage);
+            Assert.False(string.IsNullOrEmpty(result), service.ErrorMessage);
 
 
             string result2 = service.TranslateGoogle(result, "de", "en");
             Console.WriteLine(result);
             Console.WriteLine(result2);
 
-	    Assert.False(string.IsNullOrEmpty(result2), service.ErrorMessage);
+            Assert.False(string.IsNullOrEmpty(result2), service.ErrorMessage);
 
 
             q = "Here's some text \"in quotes\" that needs to encode properly";
@@ -38,7 +45,7 @@ namespace Westwind.Globalization.Test
             Console.WriteLine(q);
             Console.WriteLine(result3);
 
-	    Assert.False(string.IsNullOrEmpty(result3), service.ErrorMessage);
+            Assert.False(string.IsNullOrEmpty(result3), service.ErrorMessage);
 
 
             q =
@@ -48,19 +55,19 @@ namespace Westwind.Globalization.Test
             Console.WriteLine(q);
             Console.WriteLine(result4);
 
-	    Assert.False(string.IsNullOrEmpty(result4), service.ErrorMessage);
+            Assert.False(string.IsNullOrEmpty(result4), service.ErrorMessage);
 
         }
 
 
-	[Fact]
+        [Fact]
         public void BingTest()
         {
-            TranslationServices service = new TranslationServices();
+            TranslationServices service = new TranslationServices(configuration);
 
             // use app.config clientid and clientsecret
             string token = service.GetBingAuthToken();
-	    Assert.NotNull(token);
+            Assert.NotNull(token);
 
             string result = service.TranslateBing("Life is great and one is spoiled when it goes on and on and on", "en",
                 "de", token);
@@ -83,7 +90,7 @@ namespace Westwind.Globalization.Test
 
 
 
-	//[Fact]
+        //[Fact]
         //public void JsonEncodeDecode()
         //{
         //    string orig = "Hier sind einige Text in \"Anführungszeichen\", die ordnungsgemäß";

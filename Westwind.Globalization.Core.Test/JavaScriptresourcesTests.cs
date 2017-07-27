@@ -8,12 +8,12 @@ namespace Westwind.Globalization.Test
 {
     public class JavaScriptresourcesTests
     {
-	[Fact]
+        [Fact]
         public void GenerateResources()
         {
-	    var js = new JavaScriptResources(".\\", new DbResourceConfiguration());
-            bool result = js.ExportJavaScriptResources(".\\JavascriptResources\\","global.resources");
-	    Assert.True(result);
+            var js = new JavaScriptResources(".\\", new DbResourceConfiguration());
+            bool result = js.ExportJavaScriptResources(".\\JavascriptResources\\", "global.resources");
+            Assert.True(result);
             Console.WriteLine(File.ReadAllText(".\\JavascriptResources\\" + "LocalizationForm.de.js"));
         }
     }

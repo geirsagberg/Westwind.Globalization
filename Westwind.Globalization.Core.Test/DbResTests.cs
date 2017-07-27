@@ -12,18 +12,18 @@ namespace Westwind.Globalization.Test
 
         private string STR_ConnectionString = "SqlServerLocalizations";
 
-      
 
-	[Fact]
+
+        [Fact]
         public void CheckDataBase()
         {
             SqlDataAccess db = new SqlDataAccess(STR_ConnectionString);
-            var tb = db.ExecuteTable("localizations","select * from localizations");
+            var tb = db.ExecuteTable("localizations", "select * from localizations");
             Console.WriteLine(tb.Rows.Count);
         }
-        
 
-	[Fact]
+
+        [Fact]
         public void DbResSimpleValues()
         {
             Console.WriteLine(DbRes.T("Today", "Resources", "de-de"));
@@ -35,14 +35,14 @@ namespace Westwind.Globalization.Test
             Console.WriteLine(DbRes.T("Save", "Resources", "en-US"));
         }
 
-	[Fact]
+        [Fact]
         public void DbResHeavyLoad()
         {
             var dt = DateTime.Now;
             for (int i = 0; i < 1500; i++)
             {
                 var t = new Thread(threadedDbRes);
-                t.Start(dt);                
+                t.Start(dt);
             }
 
 
@@ -51,7 +51,7 @@ namespace Westwind.Globalization.Test
 
 
         void threadedDbRes(object dt)
-        {                                    
+        {
             try
             {
                 Console.WriteLine(DbRes.T("Today", "Resources", "de-de") + " - " + Thread.CurrentThread.ManagedThreadId + " - " + DateTime.Now.Ticks);
@@ -59,7 +59,7 @@ namespace Westwind.Globalization.Test
             }
             catch (Exception ex)
             {
-                Console.WriteLine("*** ERROR: "  + ex.Message);
+                Console.WriteLine("*** ERROR: " + ex.Message);
             }
         }
     }

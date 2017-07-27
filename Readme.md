@@ -6,12 +6,45 @@ Status:
 
 - [x] Migrate from `Westwind.Utilities.Configuration` to the new [.NET Core Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration)
 - [x] Replace HttpHandlers with an MVC Core Controller
-- [x] Update admin app to work with the new controller
+- [x] Update admin app to work with the new controller (See `Westwind.Globalization.Core.Sample`)
 - [x] Import and export of ResX
 - [ ] Export strongly typed classes
 - [ ] Localization of images and binary files
 - [ ] Update tests
 - [ ] Publish to NuGet
+- [ ] Support other DB providers than MSSQL
+
+## Getting started:
+
+- Make sure you have the latest version of VS2017 15.3 (currently Preview 6)
+- Copy the latest `.nupkg` packages from `Nuget/Westwind.Globalization.Core` and `Nuget/Westwind.Globalization.Core.Web` into a folder in your solution, e.g. `local_packages`
+- Add a `NuGet.config` to your solution root:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="LocalPackages" value="local_packages" />
+  </packageSources>
+</configuration>
+```
+- In a new or existing ASP.NET Core 2.0 project, add a `<PackageReference Include="Westwind.Globalization.Core.Web" Version="1.0.0-preview-002" />` directly in .csproj, or via NuGet dialog in VS2017.
+- In Startup.cs:
+```csharp
+public IConfiguration Configuration { get; }
+
+public Startup(IConfiguration configuration) {
+    this.Configuration = configuration;
+}
+
+public void ConfigureServices(IServiceCollection services) {
+    services.AddWestwindGlobalization(Configuration);
+    ...
+}
+```
+- Add a connection string to your database in `appSettings.json` for `DbResourceConfiguration:ConnectionString`
+- Copy the `LocalizationAdmin` folder from `Westwind.Globalization.Core.Sample` into your `wwwroot`
+- (Optional) Copy `LocalizationForm.resx` from `Westwind.Globalization.Core.Sample` into a folder named `Properties` in your project
+- Start the website and go to e.g. `http://localhost:5000/LocalizationAdmin`
 
 The following original readme has not been updated for .NET Core, but is included for reference.
 

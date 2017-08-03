@@ -8,6 +8,7 @@ Status:
 - [x] Replace HttpHandlers with an MVC Core Controller
 - [x] Update admin app to work with the new controller (See `Westwind.Globalization.Core.Sample`)
 - [x] Import and export of ResX
+- [ ] Implement `IStringLocalizer` (possibly use https://github.com/damienbod/AspNetCoreLocalization ?)
 - [ ] Export strongly typed classes
 - [ ] Localization of images and binary files
 - [ ] Update tests
@@ -27,7 +28,7 @@ Status:
   </packageSources>
 </configuration>
 ```
-- In a new or existing ASP.NET Core 2.0 project, add a `<PackageReference Include="Westwind.Globalization.Core.Web" Version="1.0.0-preview-002" />` directly in .csproj, or via NuGet dialog in VS2017.
+- In a new or existing ASP.NET Core 2.0 project, add a `<PackageReference Include="Westwind.Globalization.Core.Web" Version="1.0.0-preview-003" />` directly in .csproj, or via NuGet dialog in VS2017.
 - In Startup.cs:
 ```csharp
 public IConfiguration Configuration { get; }

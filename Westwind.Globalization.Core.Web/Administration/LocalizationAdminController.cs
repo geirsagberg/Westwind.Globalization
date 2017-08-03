@@ -19,6 +19,7 @@ using Westwind.Globalization.Core.Web.Utilities;
 namespace Westwind.Globalization.Core.Web.Administration
 {
     [Route("[controller]/api")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class LocalizationAdminController : Controller
     {
         private const string StrResourceset = "LocalizationForm";
@@ -504,9 +505,7 @@ namespace Westwind.Globalization.Core.Web.Administration
         [HttpPost("[action]")]
         public void ReloadResources()
         {
-            //Westwind.Globalization.Tools.wwWebUtils.RestartWebApplication();
-            DbResourceConfiguration.ClearResourceCache(); // resource provider
-            DbRes.ClearResources(); // resource manager
+            configuration.ClearResourceCache(); // resource provider
         }
 
 

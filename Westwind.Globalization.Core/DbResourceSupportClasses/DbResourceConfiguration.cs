@@ -214,9 +214,9 @@ namespace Westwind.Globalization.Core.DbResourceSupportClasses
 
 
         /// <summary>
-        /// Keep track of loaded providers so we can unload them
+        /// Triggered when resources are reloaded. Can be used for e.g. cache invalidation.
         /// </summary>
-        public static List<IWestWindResourceProvider> LoadedProviders = new List<IWestWindResourceProvider>();
+        public event Action OnResourcesReloaded;
 
         /// <summary>
         /// This static method clears all resources from the loaded Resource Providers 
@@ -231,18 +231,13 @@ namespace Westwind.Globalization.Core.DbResourceSupportClasses
         /// Administration form when you explicitly click the Reload Resources button.
         /// <seealso>Class DbResourceConfiguration</seealso>
         /// </summary>
-        public static void ClearResourceCache()
+        public void ClearResourceCache()
         {
-            foreach (IWestWindResourceProvider provider in LoadedProviders)
-            {
-                provider.ClearResourceCache();
-            }
+            OnResourcesReloaded?.Invoke();
 
             // clear any resource managers
             DbRes.ClearResources();
         }
-
-
     }
 
     /// <summary>

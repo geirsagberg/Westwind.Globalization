@@ -6,10 +6,10 @@
     {
       "taskName": "build",
       "command": "dotnet",
-      "type": "shell",
       "args": [
-        "build", "Westwind.Globalization.Core.Sample"
+        "build"
       ],
+      "type": "process",
       "group": {
         "kind": "build",
         "isDefault": true

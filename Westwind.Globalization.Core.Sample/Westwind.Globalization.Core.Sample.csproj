@@ -5,7 +5,7 @@
     <UserSecretsId>aspnet-Westwind.Globalization.Core.Sample-8F105943-B9E3-47B0-942B-B4372A602430</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0-preview2-final" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>

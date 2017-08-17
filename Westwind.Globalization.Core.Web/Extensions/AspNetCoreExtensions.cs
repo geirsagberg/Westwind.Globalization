@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Westwind.Globalization.Core.Utilities
+namespace Westwind.Globalization.Core.Web.Extensions
 {
     public static class AspNetCoreExtensions
     {

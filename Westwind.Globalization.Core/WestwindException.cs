@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Westwind.Globalization.Core.Web
+namespace Westwind.Globalization.Core
 {
     public class WestwindException : Exception
     {

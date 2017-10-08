@@ -1,44 +1,27 @@
-﻿
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System;
+using Westwind.Globalization.Core.DbResourceSupportClasses;
 using Westwind.Globalization.Core.Utilities;
 using Xunit;
-using Westwind.Globalization.Core.DbResourceSupportClasses;
 
 namespace Westwind.Globalization.Test
 {
     /// <summary>
-    /// Summary description for DbResXConverterTests
+    ///     Summary description for DbResXConverterTests
     /// </summary>
     public class StronglyTypedResourceTests
     {
-        private readonly DbResourceConfiguration configuration;
-
         public StronglyTypedResourceTests()
         {
-            //DbResourceConfiguration.Current.ConnectionString = "SqLiteLocalizations";
-            //DbResourceConfiguration.Current.DbResourceDataManagerType = typeof (DbResourceSqLiteDataManager);
             configuration = new DbResourceConfiguration();
         }
 
-        [Fact]
-        public void GenerateStronglyTypedResourceClassFilteredTest()
-        {
-            var str = new StronglyTypedResources(@"c:\temp", configuration);
-            var res = str.CreateClassFromAllDatabaseResources("ResourceExport", @"resources.cs", new string[] { "Resources" });
-
-            Console.WriteLine(res);
-        }
-
+        private readonly DbResourceConfiguration configuration;
 
         [Fact]
-        public void GenerateStronglyTypedResourceResxDesignerFilteredTest()
+        public void GenerateStronglyTypedDesignerClassFromResxFile()
         {
             var str = new StronglyTypedResources(@"c:\temp", configuration);
-            var res = str.CreateResxDesignerClassesFromAllDatabaseResources("ResourceExport", @"c:\temp\resourceTest", new string[] { "Resources" });
+            var res = str.CreateClassFromAllDatabaseResources("ResourceExport", @"resources.cs", new[] {"Resources"});
 
             Console.WriteLine(res);
         }
@@ -46,7 +29,6 @@ namespace Westwind.Globalization.Test
         [Fact]
         public void GenerateStronglyTypedResourceResxDesignerAllResourcesTest()
         {
-
             var str = new StronglyTypedResources(@"c:\temp\resourceTest", configuration);
             var res = str.CreateResxDesignerClassesFromAllDatabaseResources("ResourceExport", @"c:\temp\resourceTest");
 
@@ -54,18 +36,13 @@ namespace Westwind.Globalization.Test
         }
 
         [Fact]
-        public void GenerateStronglyTypedDesignerClassFromResxFile()
+        public void GenerateStronglyTypedResourceResxDesignerFilteredTest()
         {
-            string filename = @"c:\temp\resourceTest\LocalizationForm.resx";
-            string designerFile = Path.ChangeExtension(filename, "designer.cs");
-            if (File.Exists(designerFile))
-                File.Delete(designerFile);
+            var str = new StronglyTypedResources(@"c:\temp", configuration);
+            var res = str.CreateResxDesignerClassesFromAllDatabaseResources("ResourceExport", @"c:\temp\resourceTest",
+                new[] {"Resources"});
 
-            var str = new StronglyTypedResources(@"c:\temp\resourceTest", configuration);
-            str.CreateResxDesignerClassFromResxFile(filename, "LocalizationAdmin", "Westwind.Globalization.Sample");
-
-            Assert.True(File.Exists(designerFile));
-
+            Console.WriteLine(res);
         }
     }
 }

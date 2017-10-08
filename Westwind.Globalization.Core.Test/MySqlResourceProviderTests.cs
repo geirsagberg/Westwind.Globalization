@@ -1,11 +1,17 @@
 ﻿using System;
 using Westwind.Globalization.Core.DbResourceManager;
+using Westwind.Globalization.Core.DbResourceSupportClasses;
 using Xunit;
 
 namespace Westwind.Globalization.Test
 {
     public class DbResTests
     {
+        public DbResTests()
+        {
+            DbRes.Initialize(new DbResourceConfiguration());
+        }
+
         [Fact]
         public void DbResSimpleValues()
         {

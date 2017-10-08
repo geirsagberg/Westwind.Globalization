@@ -34,3 +34,4 @@ node_modules/
 /Westwind.ApplicationConfiguration.WebSample/Properties/PublishProfiles/*.pubxml
 .vs/config/applicationhost.config
 .vs/
+*.orig

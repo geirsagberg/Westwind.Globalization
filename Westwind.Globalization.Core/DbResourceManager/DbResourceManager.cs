@@ -95,7 +95,7 @@ namespace Westwind.Globalization.Core.DbResourceManager
         public DbResourceManager(DbResourceConfiguration configuration, string baseName, Assembly assembly) : base(
             baseName, assembly)
         {
-            AutoAddMissingEntries = configuration.AddMissingResources;
+            AutoAddMissingEntries = configuration?.AddMissingResources ?? throw new ArgumentNullException(nameof(configuration));
             this.configuration = configuration;
         }
 
